@@ -15,48 +15,86 @@
 
     <!--LayoutRoot est la grille racine où tout le contenu de la page est placé-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <phone:Panorama>
+            <phone:PanoramaItem>
+                <phone:PanoramaItem.Header>
+                    <TextBlock>
+                        Connexion
+                    </TextBlock>
+                </phone:PanoramaItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-        <!-- REMARQUE CONCERNANT LA LOCALISATION :
-            Pour localiser les chaînes affichées, copiez leurs valeurs dans les clés correctes
-            du fichier de ressources linguistiquement neutre de l'application (AppResources.resx), puis
-            remplacez le texte codé en dur entre les guillemets des attributs
-            par la clause de liaison dont le chemin pointe vers ce nom de chaîne.
+                    <TextBlock Text="Server: " />
+                    <TextBox x:Name="tbServer" Grid.Column="1"  />
 
-            Par exemple :
+                    <TextBlock Grid.Row="1" Text="User Name: " />
+                    <TextBox x:Name="tbUserName" Grid.Row="1" Grid.Column="1"  />
 
-                Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
+                    <TextBlock Grid.Row="2" Text="Password: " />
+                    <TextBox x:Name="tbPassword" Grid.Row="2" Grid.Column="1"  />
 
-            Cette liaison pointe vers la ressource de chaîne du modèle appelée ApplicationTitle.
+                    <Button x:Name="btConnect" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Click="btConnect_Click">Connect</Button>
+                    <Button x:Name="btDisconnect" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Right" Click="btDisconnect_Click">Disconnect</Button>
 
-            L'ajout de langues prises en charge à l'onglet Propriétés du projet crée un
-            fichier resx par langue qui peut restituer les valeurs traduites de vos
-            chaînes d'interface utilisateur. La liaison dans ces exemples peut entraîner le retrait de la valeur des
-            attributs du fichier .resx qui correspond à la valeur
-            CurrentUICulture de l'application au moment de l'exécution.
-         -->
+                    <ScrollViewer Grid.Row="4" Grid.ColumnSpan="2">
+                        <TextBlock x:Name="tbStatusScreen"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="5" x:Name="btClearConnect" Click="btClearConnect_Click" >Clear</Button>
 
-        <!--TitlePanel contient le nom de l'application et le titre de la page-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="MON APPLICATION" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
-            <TextBlock Text="nom de la page" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
 
-        <!--ContentPanel - placez tout contenu supplémentaire ici-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
 
-        </Grid>
+                </Grid>
+            </phone:PanoramaItem>
+            <phone:PanoramaItem>
+                <phone:PanoramaItem.Header>
+                    <TextBlock>
+                        Message
+                    </TextBlock>
+                </phone:PanoramaItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-        <!--Supprimez les commentaires pour voir une grille d'alignement qui vous aidera à vous assurer que vos contrôles sont
-            alignés sur les limites communes.  L'image a une marge supérieure de -32px pour
-            tenir compte de la barre d'état système. Attribuez-lui la valeur 0 (ou supprimez la marge)
-            si la barre d'état système est masquée.
+                    <TextBlock Text="Actor: " />
+                    <TextBox x:Name="tbActor" Grid.Column="1"  />
+                    <Button x:Name="btSubscribe" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Click="btSubscribe_Click" >Subscribe</Button>
+                    <Button x:Name="btUnsbscribe" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Click="btUnsbscribe_Click" >UnSubscribe</Button>
 
-            Avant l'envoi, supprimez ce XAML et l'image proprement dite.-->
-        <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
+                    <TextBlock Grid.Row="2" Text="Mesage" />
+                    <TextBox x:Name="tbMessage" Grid.Row="2" Grid.Column="1"  />
+                    <Button x:Name="btSend" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Click="btSend_Click" >Send</Button>
+
+                    <ScrollViewer Grid.Row="4" Grid.ColumnSpan="2">
+                        <TextBlock x:Name="tbMessageScreen"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="5" x:Name="btClearMessage" Click="btClearMessage_Click" >Clear</Button>
+
+                </Grid>
+
+            </phone:PanoramaItem>
+        </phone:Panorama>
     </Grid>
 
 </phone:PhoneApplicationPage>
