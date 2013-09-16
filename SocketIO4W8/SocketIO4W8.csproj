@@ -9,8 +9,8 @@
     <ProjectGuid>{27D619FB-A7C1-4366-9B12-283A702D0778}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SocketIO4Net</RootNamespace>
-    <AssemblyName>SocketIO4Net</AssemblyName>
+    <RootNamespace>SocketIO4W8</RootNamespace>
+    <AssemblyName>SocketIO4W8</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

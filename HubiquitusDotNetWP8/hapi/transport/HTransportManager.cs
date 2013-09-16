@@ -142,8 +142,8 @@ namespace HubiquitusDotNetWP8.hapi.transport
             this.connStatus = status;
             if (onStatus != null)
             {
-
-                if (WebErrorStatus.ConnectionAborted.ToString().Equals(errorMsg))
+                //9=Connection aborted
+                if (errorMsg.Equals("9"))
                 {
                     if (this.shouldConnect)
                         onStatus(status, error, errorMsg + " " + ErrorMessage.reconnIn5s);

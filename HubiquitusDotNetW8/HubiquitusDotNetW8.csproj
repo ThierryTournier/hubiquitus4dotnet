@@ -117,9 +117,9 @@
       <Project>{c5689fc5-99a9-42bd-a229-5312669a4fb2}</Project>
       <Name>HubiquitusDotNetPortable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SocketIO4Net\SocketIO4Net.csproj">
+    <ProjectReference Include="..\SocketIO4W8\SocketIO4W8.csproj">
       <Project>{27d619fb-a7c1-4366-9b12-283a702d0778}</Project>
-      <Name>SocketIO4Net</Name>
+      <Name>SocketIO4W8</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">

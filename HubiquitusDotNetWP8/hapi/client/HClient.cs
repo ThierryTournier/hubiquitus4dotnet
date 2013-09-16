@@ -30,6 +30,7 @@ using HubiquitusDotNetPortable.hapi.hStructures;
 using HubiquitusDotNetPortable.hapi.transport;
 using HubiquitusDotNetPortable.hapi.util;
 using HubiquitusDotNetWP8.hapi.transport;
+using HubiquitusDotNetWP8.hapi.transport.socketio;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
