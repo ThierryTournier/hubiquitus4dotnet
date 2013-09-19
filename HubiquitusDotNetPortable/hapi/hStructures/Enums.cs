@@ -26,7 +26,7 @@
 
 
 
-namespace HubiquitusDotNetPortable.hapi.hStructures
+namespace HubiquitusDotNet.hapi.hStructures
 {
 
     public enum ConnectionErrors

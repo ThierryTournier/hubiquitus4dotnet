@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 
-namespace HubiquitusDotNetPortable.hapi.hStructures
+namespace HubiquitusDotNet.hapi.hStructures
 {
     public class HPos : JObject
     {

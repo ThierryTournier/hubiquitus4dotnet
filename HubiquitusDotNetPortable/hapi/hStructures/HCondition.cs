@@ -28,7 +28,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 
-namespace HubiquitusDotNetPortable.hapi.hStructures
+namespace HubiquitusDotNet.hapi.hStructures
 {
     public class HCondition : JObject
     {
@@ -398,7 +398,7 @@ namespace HubiquitusDotNetPortable.hapi.hStructures
             {
                 relevant = this["relevant"].ToObject<bool>();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 relevant = null;
             }

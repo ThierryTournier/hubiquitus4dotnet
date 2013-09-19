@@ -24,12 +24,12 @@
  */
 
 
-using HubiquitusDotNetPortable.hapi.util;
+using HubiquitusDotNet.hapi.util;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 
-namespace HubiquitusDotNetPortable.hapi.hStructures
+namespace HubiquitusDotNet.hapi.hStructures
 {
     /// <summary>
     /// Version 0.5

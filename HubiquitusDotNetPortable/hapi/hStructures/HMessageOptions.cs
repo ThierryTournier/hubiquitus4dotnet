@@ -26,7 +26,7 @@
 
 using Newtonsoft.Json.Linq;
 
-namespace HubiquitusDotNetPortable.hapi.hStructures
+namespace HubiquitusDotNet.hapi.hStructures
 {
     /// <summary>
     /// Version 0.5

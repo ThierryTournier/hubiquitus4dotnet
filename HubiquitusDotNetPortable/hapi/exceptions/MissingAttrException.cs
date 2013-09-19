@@ -25,14 +25,13 @@
 
 using System;
 
-namespace HubiquitusDotNetPortable.hapi.exceptions
+namespace HubiquitusDotNet.hapi.exceptions
 {
     /// <summary>
     /// Exception to notify a missing attribute (ONLY used in builders)
     /// </summary>
     public class MissingAttrException : Exception
     {
-        private static readonly long serialVersionUID = 1L;
         private string attrName = null;
 
         public string AttrName { get { return attrName; } set { attrName = value; } }

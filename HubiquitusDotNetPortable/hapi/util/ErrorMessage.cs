@@ -26,7 +26,7 @@
 
 
 
-namespace HubiquitusDotNetPortable.hapi.util
+namespace HubiquitusDotNet.hapi.util
 {
     public static class ErrorMessage
     {

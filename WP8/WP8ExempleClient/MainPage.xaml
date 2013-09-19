@@ -1,0 +1,100 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="WP8ExempleClient.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot est la grille racine où tout le contenu de la page est placé-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Panorama>
+            <phone:PanoramaItem>
+                <phone:PanoramaItem.Header>
+                    <TextBlock>
+                        Connexion
+                    </TextBlock>
+                </phone:PanoramaItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Server: " />
+                    <TextBox x:Name="tbServer" Text="http://192.168.2.217:8081" Grid.Column="1"  />
+
+                    <TextBlock Grid.Row="1" Text="User Name: " />
+                    <TextBox x:Name="tbUserName" Text="urn:localhost:uWP8" Grid.Row="1" Grid.Column="1"  />
+
+                    <TextBlock Grid.Row="2" Text="Password: " />
+                    <TextBox x:Name="tbPassword" Text="urn:localhost:uWP8" Grid.Row="2" Grid.Column="1"  />
+
+                    <Button x:Name="btConnect" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Click="btConnect_Click">Connect</Button>
+                    <Button x:Name="btDisconnect" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Right" Click="btDisconnect_Click">Disconnect</Button>
+
+                    <ScrollViewer Grid.Row="4" Grid.ColumnSpan="2">
+                        <TextBlock x:Name="tbStatusScreen" TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="5" x:Name="btClearConnect" Click="btClearConnect_Click" >Clear</Button>
+
+
+
+                </Grid>
+            </phone:PanoramaItem>
+            <phone:PanoramaItem>
+                <phone:PanoramaItem.Header>
+                    <TextBlock>
+                        Message
+                    </TextBlock>
+                </phone:PanoramaItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Actor: " />
+                    <TextBox x:Name="tbActor" Text="urn:localhost:u1" Grid.Column="1"  />
+                    <Button x:Name="btSubscribe" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Click="btSubscribe_Click" >Subscribe</Button>
+                    <Button x:Name="btUnsbscribe" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Click="btUnsbscribe_Click" >UnSubscribe</Button>
+
+                    <TextBlock Grid.Row="2" Text="Mesage" />
+                    <TextBox x:Name="tbMessage" Text="Test" Grid.Row="2" Grid.Column="1"  />
+                    <Button x:Name="btSend" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Click="btSend_Click" >Send</Button>
+
+                    <ScrollViewer Grid.Row="4" Grid.ColumnSpan="2">
+                        <TextBlock x:Name="tbMessageScreen"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="5" x:Name="btClearMessage" Click="btClearMessage_Click" >Clear</Button>
+
+                </Grid>
+
+            </phone:PanoramaItem>
+        </phone:Panorama>
+    </Grid>
+
+</phone:PhoneApplicationPage>

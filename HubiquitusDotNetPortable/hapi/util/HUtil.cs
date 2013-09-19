@@ -29,7 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HubiquitusDotNetPortable.hapi.util
+namespace HubiquitusDotNet.hapi.util
 {
     public class HUtil
     {

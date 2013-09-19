@@ -27,7 +27,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 
-namespace HubiquitusDotNetPortable.hapi.hStructures
+namespace HubiquitusDotNet.hapi.hStructures
 {
     public class HGeo : JObject
     {

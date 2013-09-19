@@ -24,11 +24,11 @@
  */
 
 
-using HubiquitusDotNetPortable.hapi.hStructures;
+using HubiquitusDotNet.hapi.hStructures;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace HubiquitusDotNetPortable.hapi.transport
+namespace HubiquitusDotNet.hapi.transport
 {
     public delegate void DataEventHandler(string type, JObject obj);
     public delegate void StatusEventHandler(ConnectionStatus status, ConnectionErrors error, string errorMsg);
