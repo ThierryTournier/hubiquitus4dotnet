@@ -56,16 +56,9 @@ namespace HubiquitusDotNet.hapi.hStructures
 
         public string GetTransport()
         {
-            string transport = null;
-            try
-            {
-                transport = this["transport"].ToString();
-            }
-            catch (Exception)
-            {
-                transport = "socketio";
-            }
-            return transport;
+            if (this["transport"] == null)
+                return "socketio";
+            return this["transport"].ToString();
         }
 
         public void SetTransport(string transport)
@@ -86,18 +79,15 @@ namespace HubiquitusDotNet.hapi.hStructures
 
         public JArray GetEndpoints()
         {
-            JArray endpoints = null;
-            try
+            if (this["endpoints"] == null)
             {
-                endpoints = this["endpoints"].ToObject<JArray>();
-            }
-            catch (Exception e)
-            {
-                endpoints = new JArray();
+                JArray endpoints = new JArray();
                 endpoints.Add("http://localhost:8080");
-                Debug.WriteLine("{0} : Can not fetch the endpoints attribute, return 'http://localhost:8080' instead : {0}", e.ToString());
+                return endpoints;
             }
-            return endpoints;
+            else 
+                return  this["endpoints"].ToObject<JArray>();
+        
         }
 
         public void SetEndpoints(JArray endpoints)
@@ -122,16 +112,10 @@ namespace HubiquitusDotNet.hapi.hStructures
         /// <returns></returns>
         public int GetTimeout()
         {
-            int timeout = 0;
-            try
-            {
-                timeout = this["timeout"].ToObject<int>();
-            }
-            catch (Exception)
-            {
-                timeout = 10000; //15000ms by default
-            }
-            return timeout;
+            if (this["timeout"] == null)
+                return 10000;
+            else
+                return this["timeout"].ToObject<int>();
         }
 
         public void SetTimeout(int timeout)
@@ -156,16 +140,10 @@ namespace HubiquitusDotNet.hapi.hStructures
         /// <returns></returns>
         public int GetMsgTimeout()
         {
-            int timeout = 0;
-            try
-            {
-                timeout = this["msgTimeout"].ToObject<int>();
-            }
-            catch (Exception)
-            {
-                timeout = 30000; //30000ms by default
-            }
-            return timeout;
+            if (this["msgTimeout"] == null)
+                return 30000;
+            else 
+                return this["msgTimeout"].ToObject<int>();
         }
 
         public void SetMsgTimeout(int timeout)

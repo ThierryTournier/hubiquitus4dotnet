@@ -898,16 +898,12 @@ namespace HubiquitusDotNet.hapi.hStructures
         /// <returns>timeout. 0 if undefined.</returns>
         public int GetTimeout()
         {
-            int timeout = 0;
-            try
-            {
-                timeout = this["timeout"].ToObject<int>();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("{0} : Can not fetch the timeout attribute", e.ToString());
-            }
-            return timeout;
+            if (this["timeout"] == null)
+                return 0;
+            else
+                return 
+                    this["timeout"].ToObject<int>();
+            
         }
     
         public void SetTimeout(int timeout)

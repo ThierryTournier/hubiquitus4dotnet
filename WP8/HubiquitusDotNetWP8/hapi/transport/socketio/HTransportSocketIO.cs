@@ -305,13 +305,20 @@ namespace HubiquitusDotNet.hapi.transport.socketio
 
         private void Close()
         {
-            isFullJidSet = false;
-            if (this.socketIO != null)
+            try
             {
-                socketIO.Message -= socketIO_Message;
-                socketIO.SocketConnectionClosed -= socketIO_SocketConnectionClosed;
-                socketIO.Error -= socketIO_Error;
-                this.socketIO.Dispose(); // close & dispose of socket client
+                isFullJidSet = false;
+                if (this.socketIO != null)
+                {
+                    this.socketIO.Message -= socketIO_Message;
+                    this.socketIO.SocketConnectionClosed -= socketIO_SocketConnectionClosed;
+                    this.socketIO.Error -= socketIO_Error;
+                    this.socketIO.Dispose(); // close & dispose of socket client
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Close : " + ex);
             }
         }
 

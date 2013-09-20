@@ -133,7 +133,7 @@ namespace HubiquitusDotNet.hapi.transport
             if (onStatus != null)
             {
 
-                if (errorMsg.Equals("9"))
+                if (!string.IsNullOrEmpty(errorMsg) && errorMsg.Equals("9"))
                 {
                     if (this.shouldConnect)
                         onStatus(status, error, errorMsg + " " + ErrorMessage.reconnIn5s);

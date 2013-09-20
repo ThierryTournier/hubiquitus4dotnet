@@ -1,4 +1,5 @@
 ﻿using SocketIO4Net.Helpers;
+using SocketIO4WP8.Helpers;
 using SocketIOClient.Eventing;
 using SocketIOClient.Messages;
 using System;
@@ -7,10 +8,10 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using WebSocket4Net;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 using Windows.System.Threading;
-using Windows.Web;
 
 namespace SocketIOClient
 {
@@ -32,10 +33,8 @@ namespace SocketIOClient
         /// <summary>
         /// Underlying WebSocket implementation
         /// </summary>
-        protected MessageWebSocket mws;
+        protected WebSocket mws;
 
-
-        private WebSocketState mwsState = WebSocketState.None;
         /// <summary>
         /// RegistrationManager for dynamic events
         /// </summary>
@@ -78,18 +77,10 @@ namespace SocketIOClient
         {
             get
             {
-                return this.ReadyState == WebSocketState.Connected;
-            }
-        }
-
-        /// <summary>
-        /// Connection state of websocket client: None, Connecting, Open, Closing, Closed
-        /// </summary>
-        public WebSocketState ReadyState
-        {
-            get
-            {
-                return this.mwsState;
+                if (this.mws == null)
+                    return false;
+                else
+                    return this.mws.State == WebSocket4Net.WebSocketState.Open;
             }
         }
 
@@ -98,7 +89,7 @@ namespace SocketIOClient
         {
             this.uri = new Uri(url);
             this.registrationManager = new RegistrationManager();
-            this.outboundQueue = new BlockingCollection<string>(new ConcurrentQueue<string>());
+            this.outboundQueue = new BlockingCollection<string>(new SocketIO4WP8.Helpers.ConcurrentQueue<string>());
             this.dequeuOutBoundMsgTask = Task.Factory.StartNew(() => dequeuOutboundMessages(), TaskCreationOptions.LongRunning);
         }
 
@@ -107,7 +98,7 @@ namespace SocketIOClient
         /// </summary>
         public async void ConnectAsync()
         {
-            if (!(this.ReadyState == WebSocketState.Connecting || this.ReadyState == WebSocketState.Connected))
+            if (mws == null || !(mws.State == WebSocket4Net.WebSocketState.Open || mws.State == WebSocket4Net.WebSocketState.Connecting))
             {
                 try
                 {
@@ -122,60 +113,43 @@ namespace SocketIOClient
                     {
                         string wsScheme = (uri.Scheme == "https" ? "wss" : "ws");
 
-                        this.mws = new MessageWebSocket();
-                        mws.Control.MessageType = SocketMessageType.Utf8;
+                        this.mws = new WebSocket(string.Format("{0}://{1}:{2}/socket.io/1/websocket/{3}", wsScheme, uri.Host, uri.Port, this.HandShake.SID));
+                        //mws.Control.MessageType = SocketMessageType.Utf8;
                         this.mws.MessageReceived += mws_MessageReceived;
                         this.mws.Closed += mws_Closed;
-                        this.mwsState = WebSocketState.Connecting;
-                        Debug.WriteLine("ConnectAsync : Connecting on : "+string.Format("{0}://{1}:{2}/socket.io/1/websocket/{3}", wsScheme, uri.Host, uri.Port, this.HandShake.SID));
-                        await mws.ConnectAsync(new Uri(string.Format("{0}://{1}:{2}/socket.io/1/websocket/{3}", wsScheme, uri.Host, uri.Port, this.HandShake.SID)));
-                        this.mwsState = WebSocketState.Connected;
+                        this.mws.Opened +=mws_Opened;
+                        Debug.WriteLine("ConnectAsync : Connecting on : " + string.Format("{0}://{1}:{2}/socket.io/1/websocket/{3}", wsScheme, uri.Host, uri.Port, this.HandShake.SID));
+                        this.mws.Open();
                         mws_OpenEvent();
-                        Debug.WriteLine("mws_Opened : websocket opened !");
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.mwsState = WebSocketState.Closed;
                     Debug.WriteLine(string.Format("Connect threw an exception...{0}", ex.GetBaseException().HResult));
-                    WebErrorStatus status = WebSocketError.GetStatus(ex.GetBaseException().HResult);
-                    this.OnErrorEvent(this, new ErrorEventArgs(status.ToString(), ex));
+                    this.OnErrorEvent(this, new ErrorEventArgs(((WebSocketError)ex.GetBaseException().HResult).ToString(), ex));
 
                 }
             }
 
         }
 
-        void mws_Closed(IWebSocket sender, WebSocketClosedEventArgs args)
+        private void mws_Opened(object sender, EventArgs e)
         {
-            MessageWebSocket websocket = Interlocked.Exchange(ref mws, null);
-            if (websocket != null)
-            {
-                websocket.Dispose();
-            }
-            //if(this.mwsState == WebSocketState.Closing)
-                this.OnSocketConnectionClosedEvent(this, EventArgs.Empty);
-            this.mwsState = WebSocketState.Closed;
-
+            
+            Debug.WriteLine("mws_Opened : websocket opened !");
         }
-
         /// <summary>
         ///  Raw websocket messages from server - convert to message types and call subscribers of events and/or callbacks
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        void mws_MessageReceived(MessageWebSocket sender, MessageWebSocketMessageReceivedEventArgs args)
+        private void mws_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            string read = null;
+
             try
             {
-                using (DataReader reader = args.GetDataReader())
-                {
-                    reader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
-                    read = reader.ReadString(reader.UnconsumedBufferLength);
-                    Debug.WriteLine("[SOCKET_IO]: < " + read);
-                }
-                IMessage iMsg = SocketIOClient.Messages.Message.Factory(read);
+                Debug.WriteLine("[SOCKET_IO]: < " + e.Message);
+                IMessage iMsg = SocketIOClient.Messages.Message.Factory(e.Message);
 
                 if (iMsg.Event == "responseMsg")
                     Debug.WriteLine(string.Format("InvokeOnEvent: {0}", iMsg.RawMessage));
@@ -207,13 +181,24 @@ namespace SocketIOClient
             }
             catch (Exception ex) // For debugging
             {
-                this.mwsState = WebSocketState.Closed;
-                WebErrorStatus status = WebSocketError.GetStatus(ex.GetBaseException().HResult);
-                Debug.WriteLine("mws_MessageReceived::exception : " + status);
-                this.OnErrorEvent(this, new ErrorEventArgs(status.ToString(), ex));
+                this.OnErrorEvent(this, new ErrorEventArgs(((WebSocketError)ex.GetBaseException().HResult).ToString(), ex));
                 //this.Close();
+
             }
         }
+
+        private void mws_Closed(object sender, EventArgs e)
+        {
+            WebSocket websocket = Interlocked.Exchange(ref mws, null);
+            if (websocket != null)
+            {
+                websocket = null;
+            }
+            //if(this.mwsState == WebSocketState.Closing)
+            this.OnSocketConnectionClosedEvent(this, EventArgs.Empty);
+        }
+
+
 
 
 
@@ -283,6 +268,7 @@ namespace SocketIOClient
                     if (callback != null)
                         this.registrationManager.AddCallBack(msg);
 
+                    Debug.WriteLine("Emit :" + eventName + " : " + msg);
                     this.Send(msg);
                     break;
             }
@@ -333,7 +319,7 @@ namespace SocketIOClient
             var handler = this.Message;
             if (handler != null && !skip)
             {
-                Debug.WriteLine("OnMessageEvent : " + msg.MessageType + " : " + msg.RawMessage + " " + msg.MessageText);
+                Debug.WriteLine("OnMessageEvent : "+msg.MessageType +" : "+ msg.RawMessage+ " "+msg.MessageText);
                 handler(this, new MessageEventArgs(msg));
             }
         }
@@ -343,7 +329,6 @@ namespace SocketIOClient
         /// </summary>
         public void Close()
         {
-            this.mwsState = WebSocketState.Closing;
             // stop the heartbeat time
             this.closeHeartBeatTimer();
 
@@ -388,7 +373,7 @@ namespace SocketIOClient
                 //this.mws.Closed -= this.mws_Closed;
                 //this.mws.MessageReceived -= this.mws_MessageReceived;
 
-                if (this.mwsState != WebSocketState.Closed)
+                if (this.mws.State != WebSocket4Net.WebSocketState.Closed)
                 {
                     try { this.mws.Close(1000, ""); }
                     catch { Debug.WriteLine("exception raised trying to close websocket: can safely ignore, socket is being closed"); }
@@ -433,7 +418,7 @@ namespace SocketIOClient
         // Housekeeping
         protected void OnHeartBeatTimerCallback(object state)
         {
-            if (this.ReadyState == WebSocketState.Connected)
+            if (IsConnected)
             {
                 IMessage msg = new Heartbeat();
                 try
@@ -454,17 +439,17 @@ namespace SocketIOClient
                 }
             }
         }
-      
+
         /// <summary>
         /// While connection is open, dequeue and send messages to the socket server
         /// </summary>
         protected void dequeuOutboundMessages()
         {
-            while (this.outboundQueue != null && !this.outboundQueue.IsAddingCompleted)
+            while (this.outboundQueue != null && !this.outboundQueue.IsAddingCompleted )
             {
-                if (this.ReadyState == WebSocketState.Connected)
+                if (IsConnected)
                 {
-                    string msgString;
+                    string msgString = string.Empty;
                     try
                     {
                         if (this.outboundQueue.TryTake(out msgString, 500))
@@ -488,17 +473,19 @@ namespace SocketIOClient
             }
         }
 
-        private async void Write2mwsOutputStream(string msg)
+        private void Write2mwsOutputStream(string msg)
         {
             if (this.mws != null)
             {
-                using (DataWriter dataWriter = new DataWriter(this.mws.OutputStream))
-                {
-                    dataWriter.WriteString(msg);
-                    await dataWriter.StoreAsync();
-                    dataWriter.DetachStream();
-                    Debug.WriteLine("[SOCKET_IO]: > " + msg);
-                }
+                this.mws.Send(msg);
+                //using (DataWriter dataWriter = new DataWriter(this.mws))
+                //{
+                //    dataWriter.WriteString(msg);
+                //    await dataWriter.StoreAsync();
+                //    dataWriter.DetachStream();
+
+                //}
+                Debug.WriteLine("[SOCKET_IO]: > " + msg);
             }
         }
 

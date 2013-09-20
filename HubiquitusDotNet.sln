@@ -17,9 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubiquitusDotNetWP8", "WP8\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP8ExempleClient", "WP8\WP8ExempleClient\WP8ExempleClient.csproj", "{E125B099-173B-4906-8BC5-5456D8631C56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Socket4WP", "WP8\Socket4WP\Socket4WP.csproj", "{B37F4807-03E1-451C-B4EE-5B30B17CD107}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketIO4WP8", "SocketIO4WP8\SocketIO4WP8.csproj", "{6EABD9C4-E623-41AF-88CD-26707F1A5429}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketIO4WP8", "WP8\SocketIO4WP8\SocketIO4WP8.csproj", "{6EABD9C4-E623-41AF-88CD-26707F1A5429}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
